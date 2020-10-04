@@ -52,9 +52,13 @@ void TSet::DelElem(const int Elem) // исключение элемента мн
 
 TSet& TSet::operator=(const TSet& s) // присваивание
 {
-	BitField = s.BitField;
-	MaxPower = s.MaxPower;
-	return *this;
+	if (!(*this == s))
+	{
+		BitField = s.BitField;
+		MaxPower = s.MaxPower;
+		return *this;
+	}
+	else return *this;
 }
 
 int TSet::operator==(const TSet& s) const // сравнение
@@ -100,6 +104,31 @@ TSet TSet::operator~(void) // дополнение
 	TSet tField(MaxPower);
 	tField.BitField = ~BitField;
 	return tField;
+}
+
+void TSet::swap(int n, int new_elem)
+{
+	if (n == new_elem) { }			// Ecli nomer elementa = new element -> nichego ne delayem
+	else {
+		if ((n < 0) || (new_elem < 0 || new_elem > MaxPower))
+		{
+			throw std::out_of_range("Input error: invalide value of tset in swap");
+		}
+		else {
+			int tmp = 0;
+			int count = 0;
+			for (int i = 0; count < n; i++)
+			{
+				if (BitField.GetBit(i))
+				{
+					tmp = i;
+					count++;
+				}
+			}
+			DelElem(tmp);
+			InsElem(new_elem);
+		}
+	}
 }
 
 // перегрузка ввода/вывода

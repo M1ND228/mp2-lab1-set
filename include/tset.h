@@ -39,5 +39,7 @@ public:
 
   friend istream &operator>>(istream &istr, TSet &bf);
   friend ostream &operator<<(ostream &ostr, const TSet &bf);
+
+  void swap(int n, int new_elem);
 };
 #endif
