@@ -6,6 +6,7 @@
 // Множество - реализация через битовые поля
 
 #include "tset.h"
+#include <string>
 
 TSet::TSet(int mp) :BitField(mp)
 {
@@ -135,13 +136,88 @@ void TSet::swap(int n, int new_elem)
 
 istream& operator>>(istream& istr, TSet& s) // ввод
 {
-	istr >> s.BitField;
-	s.MaxPower = s.BitField.GetLength();
+	string text;
+	string tmp;
+	getline(istr, tmp);
+	int space = 1; 
+	for (int i = 0; i < tmp.length(); i++)
+	{
+		if (tmp[i] != '{' && tmp[i] != '}' && tmp[i] != ',')
+		{
+			text += tmp[i];									// Chistyui text
+		}
+		if (tmp[i] == ' ')
+		{
+			space++;
+		}
+	}
+	
+	string* delSpace = new string[space]; 
+	int index = 0;
+	for (int i = 0; i < text.length(); i++)
+	{
+		if (text[i] != ' ')
+		{
+			delSpace[index] += text[i];
+		}
+		else index++;
+	}
+	
+	int* textConvertInt = new int[space];
+	
+	int maxElement = 0;
+	for (int i = 0; i < space; i++)
+	{
+		textConvertInt[i] = StrToInt(delSpace[i]);
+		if (textConvertInt[i] > maxElement)
+		{
+			maxElement = textConvertInt[i];
+		}
+	}
+	
+	TSet res(maxElement + 1);
+	for (int i = 0; i < space; i++)
+	{
+		res.InsElem(textConvertInt[i]);
+	}
+
+	delete[] delSpace;
+	delete[] textConvertInt;
+	
+	s = res;
+	
 	return istr;
-}
+ }
 
 ostream& operator<<(ostream& ostr, const TSet& s) // вывод
 {
-	ostr << s.BitField;
+	cout << "{";
+	for (int i = 0; i < s.BitField.GetLength(); i++)
+	{
+		if (s.BitField.GetBit(i))
+		{
+			if (i == s.BitField.GetLength() - 1)
+			{
+				ostr << i;
+			}
+			else
+			{
+				ostr << i;
+				ostr << ", ";
+			}
+		}
+	}
+	cout << "}";
+
 	return ostr;
+}
+
+int StrToInt(std::string str)
+{
+	int res = 0;
+	for (int i = 0; i < str.length(); i++)
+	{
+		res = res * 10 + (str[i] - '0');
+	}
+	return res;
 }

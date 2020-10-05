@@ -42,4 +42,7 @@ public:
 
   void swap(int n, int new_elem);
 };
+
+int StrToInt(string str);
+
 #endif
